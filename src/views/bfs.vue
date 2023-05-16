@@ -75,6 +75,7 @@ const init = () => {
   initBaseMap(clientWidth, clientHeight)
   createGrid()
   // 自适应
+  
   window.onresize = () => {
     onresize()
   }
