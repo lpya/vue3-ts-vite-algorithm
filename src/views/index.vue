@@ -1,6 +1,6 @@
 
 <template>
-  <div class="index">
+  <div class="index" >
     <ul>
       <li v-for="(item, key) in linkList" :key="key">
         <router-link :to="item.path">
@@ -19,7 +19,12 @@ const state = reactive({
     {
       title: '广度优先(BFS)',
       path: '/bfs',
-    }]
+    },
+    {
+      title: '深度优先(DFS)',
+      path: '/dfs',
+    },
+  ]
 })
 const { linkList } = toRefs(state)
 </script>

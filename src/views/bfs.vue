@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="bfs">
     <div class="header">
       <el-button @click="back">返回</el-button>
       <el-button type="primary" @click="createWalls">生成障碍物</el-button>
@@ -75,7 +75,7 @@ const init = () => {
   initBaseMap(clientWidth, clientHeight)
   createGrid()
   // 自适应
-  
+
   window.onresize = () => {
     onresize()
   }
@@ -400,16 +400,14 @@ const back = () => {
 </script>
 
 <style lang="scss" scoped>
-.index {
+.bfs {
   padding: 20px;
 
   .header {
     height: 50px;
-    color: #ffc800;
   }
 
   #canvas {
-    color: #26deff;
     background-color: #eee;
     border: 1px solid #666;
     height: calc(100vh - 92px);

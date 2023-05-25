@@ -9,6 +9,10 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: '/bfs',
     name: 'bfs',
     component: () => import('@/views/bfs.vue'),
+  }, {
+    path: '/dfs',
+    name: 'dfs',
+    component: () => import('@/views/dfs.vue'),
   }
 ]
 const router = createRouter({
