@@ -57,7 +57,7 @@ const init = () => {
  */
 const createGrid = () => {
   state.boxList = []
-  for (let x = 0; x < 80; x++) {
+  for (let x = 0; x < 50; x++) {
     state.boxList[x] = []
     for (let y = 0; y < 50; y++) {
       state.boxList[x][y] = 0
@@ -74,7 +74,7 @@ const createDarriers = () => {
   let i = 0
   const rectList: IRect[] = []
   do {
-    let x = Math.round(Math.random() * 79)
+    let x = Math.round(Math.random() * 49)
     let y = Math.round(Math.random() * 49)
     let newRect: IRect = {
       x: x,
@@ -100,7 +100,7 @@ const createDarriers = () => {
  */
 const createStartEnd = () => {
   for (let i = 0; i < 2; i++) {
-    let x = Math.round(Math.random() * 79)
+    let x = Math.round(Math.random() * 49)
     let y = Math.round(Math.random() * 49)
     let val = 2
     if (i === 0) {
@@ -153,22 +153,30 @@ const search = () => {
  * @return {*}
  */
 const setPath = (pathList: number[][]) => {
-  pathList.forEach((item, key) => {
-    let x = item[0]
-    let y = item[1]
+  let currentKey = 0;
+  const setPathTimer = (i: number) => {
+    const path = pathList[i]
+    let x = path[0]
+    let y = path[1]
     if (x == state.start[0] && y === state.start[1]) {
       state.boxList[x][y] = 2
     } else if (x == state.end[0] && y === state.end[1]) {
       state.boxList[x][y] = 3
     } else {
-      setTimeout(() => {
-        state.boxList[x][y] = 4
-      }, 2000)
+      state.boxList[x][y] = 4
+    }
 
+  }
+  clearInterval(timer)
+  timer = setInterval(() => {
+    if (currentKey < pathList.length) {
+      setPathTimer(currentKey)
+      currentKey++
+    } else {
+      clearInterval(timer)
     }
   })
 }
-
 /**
  * @desc: 判断当前坐标是否超出范围
  * @param {*} x
@@ -233,7 +241,7 @@ const back = () => {
 
     .container {
       display: flex;
-      width: 800px;
+      width: 500px;
       height: 500px;
       border: 1px solid #666;
 
