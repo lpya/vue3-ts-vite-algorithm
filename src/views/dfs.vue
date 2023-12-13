@@ -175,7 +175,7 @@ const setPath = (pathList: number[][]) => {
     } else {
       clearInterval(timer)
     }
-  })
+  }, 20)
 }
 /**
  * @desc: 判断当前坐标是否超出范围
@@ -212,7 +212,6 @@ const getBoxStyle = (val: number) => {
     return 'visited'
   }
 }
-
 const router = useRouter()
 /**
  * @desc: 返回
