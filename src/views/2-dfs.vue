@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, toRefs } from "vue";
+import { onMounted, reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 interface IRect {
   x: number
@@ -30,123 +30,123 @@ const state = reactive({
   startY: 0,
   directions: [
     [-1, 0], // 上
-    [0, 1],  // 右
-    [1, 0],  // 下
-    [0, -1]  // 左
+    [0, 1], // 右
+    [1, 0], // 下
+    [0, -1] // 左
   ],
   path: [] as number[][]
-})
-let timer: NodeJS.Timer
-let visited = new Set()
+});
+let timer: NodeJS.Timer;
+let visited = new Set();
 
-const { boxList } = toRefs(state)
+const { boxList } = toRefs(state);
 onMounted(() => {
-  init()
-})
+  init();
+});
 
 /**
  * @desc: 初始化
  * @return {*}
  */
 const init = () => {
-  createGrid()
-}
+  createGrid();
+};
 /**
  * @desc: 生成网格图形
  * @return {*}
  */
 const createGrid = () => {
-  state.boxList = []
+  state.boxList = [];
   for (let x = 0; x < 50; x++) {
-    state.boxList[x] = []
+    state.boxList[x] = [];
     for (let y = 0; y < 50; y++) {
-      state.boxList[x][y] = 0
+      state.boxList[x][y] = 0;
     }
   }
-}
+};
 /**
  * @desc: 生成障碍物
  * @return {*}
  */
 const createDarriers = () => {
-  clearInterval(timer)
-  createGrid()
-  let i = 0
-  const rectList: IRect[] = []
+  clearInterval(timer);
+  createGrid();
+  let i = 0;
+  const rectList: IRect[] = [];
   do {
-    let x = Math.round(Math.random() * 49)
-    let y = Math.round(Math.random() * 49)
+    let x = Math.round(Math.random() * 49);
+    let y = Math.round(Math.random() * 49);
     let newRect: IRect = {
       x: x,
       y: y
-    }
+    };
     let overlapping = false;
     for (const rect of rectList) {
       if (newRect.x === rect.x && newRect.y === rect.y) {
-        overlapping = true
-        break
+        overlapping = true;
+        break;
       }
     }
     if (!overlapping) {
-      state.boxList[x][y] = 1
-      i++
+      state.boxList[x][y] = 1;
+      i++;
     }
-  } while (i < 500)
-  createStartEnd()
-}
+  } while (i < 500);
+  createStartEnd();
+};
 /**
  * @desc: 生成起点和终点
  * @return {*}
  */
 const createStartEnd = () => {
   for (let i = 0; i < 2; i++) {
-    let x = Math.round(Math.random() * 49)
-    let y = Math.round(Math.random() * 49)
-    let val = 2
+    let x = Math.round(Math.random() * 49);
+    let y = Math.round(Math.random() * 49);
+    let val = 2;
     if (i === 0) {
-      val = 2
-      state.start = [x, y]
+      val = 2;
+      state.start = [x, y];
     } else {
-      val = 3
-      state.end = [x, y]
+      val = 3;
+      state.end = [x, y];
     }
-    state.boxList[x][y] = val
+    state.boxList[x][y] = val;
   }
-}
+};
 /**
  * @desc: 搜索
  * @return {*}
  */
 const search = () => {
-  state.path = []
-  visited.clear()
-  state.startX = state.start[0]
-  state.startY = state.start[1]
+  state.path = [];
+  visited.clear();
+  state.startX = state.start[0];
+  state.startY = state.start[1];
   function dfs(x: number, y: number) {
     if (!isValid(x, y)) {
-      return false
+      return false;
     }
     if (state.boxList[x][y] === 1) {
-      return false
+      return false;
     }
     if (state.boxList[x][y] === 5) {
-      return false
+      return false;
     }
     if (state.boxList[x][y] === 3) {
-      state.path.push([x, y])
-      return true
+      state.path.push([x, y]);
+      return true;
     }
-    state.path.push([x, y])
+    state.path.push([x, y]);
     if (state.boxList[x][y] !== 2) {
-      state.boxList[x][y] = 5
+      state.boxList[x][y] = 5;
     }
     if (dfs(x, y + 1) || dfs(x, y - 1) || dfs(x + 1, y) || dfs(x - 1, y)) {
-      return true
+      return true;
     }
   }
-  dfs(state.startX, state.startY)
-  setPath(state.path)
-}
+  dfs(state.startX, state.startY);
+  setPath(state.path);
+};
 /**
  * @desc: 设置路径
  * @param {*} pathList
@@ -155,28 +155,28 @@ const search = () => {
 const setPath = (pathList: number[][]) => {
   let currentKey = 0;
   const setPathTimer = (i: number) => {
-    const path = pathList[i]
-    let x = path[0]
-    let y = path[1]
+    const path = pathList[i];
+    let x = path[0];
+    let y = path[1];
     if (x == state.start[0] && y === state.start[1]) {
-      state.boxList[x][y] = 2
+      state.boxList[x][y] = 2;
     } else if (x == state.end[0] && y === state.end[1]) {
-      state.boxList[x][y] = 3
+      state.boxList[x][y] = 3;
     } else {
-      state.boxList[x][y] = 4
+      state.boxList[x][y] = 4;
     }
 
-  }
-  clearInterval(timer)
+  };
+  clearInterval(timer);
   timer = setInterval(() => {
     if (currentKey < pathList.length) {
-      setPathTimer(currentKey)
-      currentKey++
+      setPathTimer(currentKey);
+      currentKey++;
     } else {
-      clearInterval(timer)
+      clearInterval(timer);
     }
-  }, 20)
-}
+  }, 20);
+};
 /**
  * @desc: 判断当前坐标是否超出范围
  * @param {*} x
@@ -185,13 +185,13 @@ const setPath = (pathList: number[][]) => {
  */
 const isValid = (x: number, y: number) => {
   if (x < 0 || x >= state.boxList.length) {
-    return false
+    return false;
   }
   if (y < 0 || y >= state.boxList[0].length) {
-    return false
+    return false;
   }
-  return true
-}
+  return true;
+};
 /**
  * @desc: 获取当前障碍物样式
  * @param {*} val 状态：0=正常|1=障碍物|2=起点|3=终点|4=路径|5=已访问
@@ -199,27 +199,27 @@ const isValid = (x: number, y: number) => {
  */
 const getBoxStyle = (val: number) => {
   if (val === 0) {
-    return 'normal'
+    return 'normal';
   } else if (val === 1) {
-    return 'darriers'
+    return 'darriers';
   } else if (val === 2) {
-    return 'start'
+    return 'start';
   } else if (val === 3) {
-    return 'end'
+    return 'end';
   } else if (val === 4) {
-    return 'path'
-  } else {
-    return 'visited'
-  }
-}
-const router = useRouter()
+    return 'path';
+  } 
+  return 'visited';
+  
+};
+const router = useRouter();
 /**
  * @desc: 返回
  * @return {*}
  */
 const back = () => {
-  router.push('/')
-}
+  router.push('/');
+};
 </script>
 
 <style lang="scss" scoped>

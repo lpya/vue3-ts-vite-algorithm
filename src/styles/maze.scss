@@ -1,0 +1,41 @@
+.maze {
+  padding: 20px;
+
+  .header {
+    height: 50px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee;
+    border: 1px solid #666;
+    height: calc(100vh - 92px);
+
+    .content {
+      display: grid;
+      background: red;
+
+      .cell {
+        width: 15px;
+        height: 15px;
+        background: white;
+        transition: background 0.2s;
+      }
+
+      .cell.wall {
+        background: #333;
+      }
+
+      .cell.start {
+        background: #00ff08 !important;
+      }
+
+      .cell.end {
+        background: #ff0000 !important;
+      }
+
+    }
+  }
+}

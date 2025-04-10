@@ -32,34 +32,39 @@ const state = reactive({
     {
       title: '广度优先搜索(BFS)',
       path: '/bfs',
-      coverUrl: '../assets/images/1.png',
+      coverUrl: '../assets/images/1.png'
     },
     {
       title: '深度优先搜索(DFS)',
       path: '/dfs',
-      coverUrl: '../assets/images/2.png',
+      coverUrl: '../assets/images/2.png'
     },
     {
       title: 'A*寻路算法',
       path: '/astart',
-      coverUrl: '../assets/images/3.png',
+      coverUrl: '../assets/images/3.png'
     },
+    {
+      title: '迷宫生成',
+      path: '/maze',
+      coverUrl: '../assets/images/3.png'
+    }
   ]
-})
-const { linkList } = toRefs(state)
+});
+const { linkList } = toRefs(state);
 
 const jumpHome = () => {
-  window.location.href = 'https://www.lpya.cn'
-}
+  window.location.href = 'https://www.jjianli.com';
+};
 
 const jumpGithub = () => {
-  window.location.href = 'https://github.com/lpya/vue3-ts-vite-algorithm'
-}
+  window.location.href = 'https://github.com/lpya/vue3-ts-vite-algorithm';
+};
 
 const getAssetsFile = (url: string) => {
-  const imgUrl = new URL(url, import.meta.url).href
-  return imgUrl
-}
+  const imgUrl = new URL(url, import.meta.url).href;
+  return imgUrl;
+};
 </script>
   
 <style lang="scss" scoped>
@@ -111,7 +116,6 @@ const getAssetsFile = (url: string) => {
 
         }
 
-
         .title {
           margin-top: 10px;
           text-align: center;
@@ -125,8 +129,7 @@ const getAssetsFile = (url: string) => {
 
 }
 
-
-@for $i from 1 through 3 {
+@for $i from 1 through 4 {
   .list-item:nth-child(#{$i}) {
     .cover {
       background: url("@/assets/images/#{$i}.png");

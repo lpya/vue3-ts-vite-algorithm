@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, toRefs } from "vue";
+import { onMounted, reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface Node {
@@ -40,29 +40,29 @@ const state = reactive({
   startNode: {} as Node,
   endNode: {} as Node,
   pathList: [] as Path[]
-})
-let timer: NodeJS.Timer
+});
+let timer: NodeJS.Timer;
 
-const { nodeList } = toRefs(state)
+const { nodeList } = toRefs(state);
 onMounted(() => {
-  init()
-})
+  init();
+});
 
 /**
  * @desc: 初始化
  * @return {*}
  */
 const init = () => {
-  createGrid()
-}
+  createGrid();
+};
 /**
  * @desc: 生成网格图形
  * @return {*}
  */
 const createGrid = () => {
-  state.nodeList = []
+  state.nodeList = [];
   for (let x = 0; x < 80; x++) {
-    state.nodeList[x] = []
+    state.nodeList[x] = [];
     for (let y = 0; y < 50; y++) {
       state.nodeList[x][y] = {
         x: x,
@@ -72,22 +72,22 @@ const createGrid = () => {
         h: 0,
         f: 0,
         parent: null
-      }
+      };
     }
   }
-}
+};
 /**
  * @desc: 生成障碍物
  * @return {*}
  */
 const createDarriers = () => {
-  clearInterval(timer)
-  createGrid()
-  let i = 0
-  const nodeList: Node[] = []
+  clearInterval(timer);
+  createGrid();
+  let i = 0;
+  const nodeList: Node[] = [];
   do {
-    let x = Math.round(Math.random() * 79)
-    let y = Math.round(Math.random() * 49)
+    let x = Math.round(Math.random() * 79);
+    let y = Math.round(Math.random() * 49);
     let newNode: Node = {
       x: x,
       y: y,
@@ -96,49 +96,49 @@ const createDarriers = () => {
       h: 0,
       f: 0,
       parent: null
-    }
+    };
     let overlapping = false;
     for (const node of nodeList) {
       if (newNode.x === node.x && newNode.y === node.y) {
-        overlapping = true
-        break
+        overlapping = true;
+        break;
       }
     }
     if (!overlapping) {
-      newNode.type = 1
-      state.nodeList[x][y] = newNode
-      i++
+      newNode.type = 1;
+      state.nodeList[x][y] = newNode;
+      i++;
     }
-  } while (i < 1000)
-  createStartEnd()
-}
+  } while (i < 1500);
+  createStartEnd();
+};
 /**
  * @desc: 生成起点和终点
  * @return {*}
  */
 const createStartEnd = () => {
   for (let i = 0; i < 2; i++) {
-    let x = Math.round(Math.random() * 79)
-    let y = Math.round(Math.random() * 49)
-    let type: NodeType = 2
-    let currentNode = state.nodeList[x][y]
+    let x = Math.round(Math.random() * 79);
+    let y = Math.round(Math.random() * 49);
+    let type: NodeType = 2;
+    let currentNode = state.nodeList[x][y];
     if (i === 0) {
-      type = 2
-      state.startNode = currentNode
+      type = 2;
+      state.startNode = currentNode;
     } else {
-      type = 3
-      state.endNode = currentNode
+      type = 3;
+      state.endNode = currentNode;
     }
-    state.nodeList[x][y].type = type
+    state.nodeList[x][y].type = type;
   }
-}
+};
 /**
  * @desc: 搜索
  * @return {*}
  */
 const search = () => {
-  astart(state.startNode, state.endNode, state.nodeList)
-}
+  astart(state.startNode, state.endNode, state.nodeList);
+};
 
 /**
  * @desc: 开始
@@ -148,47 +148,47 @@ const search = () => {
  * @return {*}
  */
 const astart = (startNode: Node, endNode: Node, grid: Node[][]) => {
-  const openList: Node[] = []
-  const closeList: Node[] = []
-  openList.push(startNode)
+  const openList: Node[] = [];
+  const closeList: Node[] = [];
+  openList.push(startNode);
   const start = () => {
-    let currentNode = openList[0]
-    let currentIndex = 0
+    let currentNode = openList[0];
+    let currentIndex = 0;
     for (let i = 1; i < openList.length; i++) {
       if (openList[i].f < currentNode.f) {
-        currentNode = openList[i]
-        currentIndex = i
+        currentNode = openList[i];
+        currentIndex = i;
       }
     }
-    openList.splice(currentIndex, 1)
-    closeList.push(currentNode)
+    openList.splice(currentIndex, 1);
+    closeList.push(currentNode);
     if (currentNode.x === endNode.x && currentNode.y === endNode.y) {
-      clearInterval(timer)
-      setPath(getPath(currentNode))
-      return
+      clearInterval(timer);
+      setPath(getPath(currentNode));
+      return;
     }
     const neighbors = getNeighbors(currentNode, grid);
     for (let i = 0; i < neighbors.length; i++) {
-      const neighbor = neighbors[i]
+      const neighbor = neighbors[i];
       if (closeList.includes(neighbor)) {
-        continue
+        continue;
       }
-      const g = currentNode.g + getDistance(currentNode, neighbor)
+      const g = currentNode.g + getDistance(currentNode, neighbor);
       if (!openList.includes(neighbor) || g < neighbor.g) {
         // neighbor.g = 1
-        neighbor.h = getDistance(currentNode, endNode)
-        neighbor.f = neighbor.g + neighbor.h
-        neighbor.parent = currentNode
+        neighbor.h = getDistance(currentNode, endNode);
+        neighbor.f = neighbor.g + neighbor.h;
+        neighbor.parent = currentNode;
         if (!openList.includes(neighbor)) {
           openList.push(neighbor);
         }
       }
     }
-  }
-  clearInterval(timer)
+  };
+  clearInterval(timer);
   timer = setInterval(() => {
-    start()
-  })
+    start();
+  });
 
   // while (openList.length > 0) {
   //   let currentNode = openList[0]
@@ -233,7 +233,7 @@ const astart = (startNode: Node, endNode: Node, grid: Node[][]) => {
       if (currentNode.parent) {
         currentNode = currentNode.parent;
       } else {
-        currentNode.parent = null
+        currentNode.parent = null;
       }
     }
     return path;
@@ -252,12 +252,12 @@ const astart = (startNode: Node, endNode: Node, grid: Node[][]) => {
         const neighbor = grid[newX][newY];
         if (neighbor.type === 0 || neighbor.type === 3) {
           if (dx === -1 && dy === -1 || dx === -1 && dy === 1 || dx === 1 && dy === -1 || dx === 1 && dy === 1) {
-            neighbor.g = 2
+            neighbor.g = 2;
           }
           neighbors.push(neighbor);
         }
         if (neighbor.type !== 1 && neighbor.type !== 2 && neighbor.type !== 3) {
-          state.nodeList[newX][newY].type = 5
+          state.nodeList[newX][newY].type = 5;
         }
       }
     }
@@ -270,7 +270,7 @@ const astart = (startNode: Node, endNode: Node, grid: Node[][]) => {
     // return dx + dy;
     return Math.sqrt(dx * dx + dy * dy);
   }
-}
+};
 /**
  * @desc: 设置路径
  * @param {*} pathList
@@ -279,10 +279,10 @@ const astart = (startNode: Node, endNode: Node, grid: Node[][]) => {
 const setPath = (pathList: Path[]) => {
   pathList.forEach((item) => {
     if (item.x !== state.endNode.x || item.y !== state.endNode.y) {
-      state.nodeList[item.x][item.y].type = 4
+      state.nodeList[item.x][item.y].type = 4;
     }
-  })
-}
+  });
+};
 /**
  * @desc: 获取当前障碍物样式
  * @param {*} val 状态：0=正常|1=障碍物|2=起点|3=终点|4=路径|5=已访问
@@ -290,28 +290,28 @@ const setPath = (pathList: Path[]) => {
  */
 const getBoxStyle = (type: number) => {
   if (type === 0) {
-    return 'normal'
+    return 'normal';
   } else if (type === 1) {
-    return 'darriers'
+    return 'darriers';
   } else if (type === 2) {
-    return 'start'
+    return 'start';
   } else if (type === 3) {
-    return 'end'
+    return 'end';
   } else if (type === 4) {
-    return 'path'
-  } else {
-    return 'visited'
-  }
-}
+    return 'path';
+  } 
+  return 'visited';
+  
+};
 
-const router = useRouter()
+const router = useRouter();
 /**
  * @desc: 返回
  * @return {*}
  */
 const back = () => {
-  router.push('/')
-}
+  router.push('/');
+};
 </script>
 
 <style lang="scss" scoped>
