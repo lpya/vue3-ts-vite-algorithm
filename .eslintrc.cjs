@@ -22,6 +22,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
+    'vue/multi-word-component-names': 'off', // 关闭耗时规则
     'semi': ['error', 'always'],
     'no-undef': 0,
     'no-var': 2, // 禁用var，用let和const代替
@@ -54,8 +55,7 @@ module.exports = {
     'array-bracket-spacing': [2, 'never'], // 是否允许非空数组里面有多余的空格 
     'no-multiple-empty-lines': ['error', { 'max': 1 }],
     'space-infix-ops': 'error', 
-    'vue/max-attributes-per-line': 0, // 换行
-    'vue/multi-word-component-names': 0,
+    'vue/max-attributes-per-line': 0, // 换行 
     'vue/no-unused-vars': 0,  
     'vue/html-self-closing': ['error', {
       'html': {
